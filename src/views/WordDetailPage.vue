@@ -44,7 +44,7 @@ let audio = ref(null)
 
 onMounted (async () => {
     try {
-        const respone = await axios.get('http://127.0.0.1:8000/words/')
+        const respone = await axios.get(`${import.meta.env.VITE_API_URL}/words`)
         const words = respone.data
         word.value = words.find(item => item.key === key)
         console.log(word.value)
@@ -58,7 +58,7 @@ onMounted (async () => {
 const add_notes = async () => {
     if (text.value != word.value.notes)
     try {
-        await axios.put("http://127.0.0.1:8000/add_notes/",  {
+        await axios.put(`${import.meta.env.VITE_API_URL}/add_notes`,  {
             "word": word.value.key, 
             "text": text.value
         })
@@ -75,8 +75,8 @@ const goBack = () => {
 
 const playAudio = (audioPath) => {
 
-    audio = new Audio(`http://localhost:8000/${audioPath}`)
-    console.log(`http://localhost:8000/${audioPath}`)
+    audio = new Audio(`${import.meta.env.VITE_API_URL}/${audioPath}`)
+    console.log(`${import.meta.env.VITE_API_URL}/${audioPath}`)
     try {
         audio.play()
     } catch(e) {

@@ -103,7 +103,7 @@ const hasNext = ref(false)
 
 const fetch_data = async () => {
     try {
-        const respone = await axios.get(`http://127.0.0.1:8000/list_words/?page=${currentPage.value}&size=${page_size}`)
+        const respone = await axios.get(`${import.meta.env.VITE_API_URL}/list_words/?page=${currentPage.value}&size=${page_size}`)
 
         words.value = respone.data.words
         hasNext.value = respone.data.has_next
@@ -140,7 +140,7 @@ const add_word = async () => {
     try {
         const word = new_word.value.trim()
         if (!word) return
-        await axios.post('http://127.0.0.1:8000/words/add/', {word: word})
+        await axios.post(`${import.meta.env.VITE_API_URL}/words/add/`, {word: word})
         console.log('add new word to json file')
         new_word.value = ''
         await fetch_data()
@@ -159,7 +159,7 @@ onMounted(fetch_data)
 
 const Delete = async (key) => {
     try {
-        await axios.delete('http://127.0.0.1:8000/words/delete', {data : {word: key}})
+        await axios.delete(`${import.meta.env.VITE_API_URL}/words/delete`, {data : {word: key}})
          await fetch_data ()
         console.log(`deleted ${key}`)
     } catch (err) {

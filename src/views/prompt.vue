@@ -74,11 +74,11 @@ const textArea = ref(null)
 
 const fetchWords = async () => {
   try {
-    const response = await axios.get('http://127.0.0.1:8000/words')
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/words`)
     words.value = response.data
     keys.value = words.value.filter(item => item.number > 3).map(item => item.key)
     console.log(keys.value)
-    
+    console.log(`${import.meta.env.VITE_API_URL}/api/words`)
     console.log('Data was fetched successfully')
   } catch (e) {
     alert('There is an error: ' + e.message)
@@ -86,7 +86,7 @@ const fetchWords = async () => {
 
 
   try {
-    const response = await axios.get('http://127.0.0.1:8000/self_prompt')
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/self_prompt`)
     self.value = response.data
     self_introduction.value = self.value.self_introduce
     // console.log('Topics fetched:', self.value.topics)
@@ -156,7 +156,7 @@ const add_sentence = async() => {
     if (!text) return
     word.value = 'eat'
     try {    
-        await axios.post('http://127.0.0.1:8000/words/add_sentence/', {
+        await axios.post(`${import.meta.env.VITE_API_URL}/words/add_sentence/`, {
         word: randomword.value, 
         sentence : text
         })
@@ -178,8 +178,8 @@ function safeFilename(sentence) {
 
 const playAudio = (audioPath) => {
     const filename = safeFilename(submittedSentence.value)
-    audio = new Audio(`http://localhost:8000/backend/audios/sentences/${filename}`)
-    console.log(`http://localhost:8000/backend/audios/sentences/${filename}`)
+    audio = new Audio( `${import.meta.env.VITE_API_URL}/backend/audios/sentences/${filename}`)
+    console.log( `${import.meta.env.VITE_API_URL}/backend/audios/sentences/${filename}`)
     try {
         audio.play()
     } catch(e) {

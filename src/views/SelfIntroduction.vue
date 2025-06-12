@@ -106,7 +106,7 @@ const sentence = ref('')
 // fetch data
 const fetch_data = async () => {
   try {
-      const response = await axios.get('http://127.0.0.1:8000/self')
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/self`)
       default_introduction.value = response.data.default_introduction
       self_introduce.value = response.data.self_introduce
       topics.value = response.data.topics
@@ -164,7 +164,7 @@ const updata_self= async(key) => {
   }
 
   try {
-    await axios.put('http://127.0.0.1:8000/update_self/',data)
+    await axios.put(`${import.meta.env.VITE_API_URL}/update_self/`,data)
     alert("updated")
   } catch (err) {
     console.error('there is an error', err)
