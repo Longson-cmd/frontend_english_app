@@ -72,7 +72,7 @@
     <h2 class="ml-10 text-blue-800 text-3xl mb-5">II. CHOOSE TOPICS</h2>
     <ul class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-6  text-center px-20 pb-10 mx-auto">
       <li v-for="topic in topics.daily_conversation_topics " :key="topic"
-      :class="['border shadow-xl w-30 hover:scale-110 rounded-4xl flex items-center justify-center' , topics.userChoises.includes(topic)? 'bg-blue-500' : 'bg-gray-200']"
+      :class="['border shadow-xl w-30 hover:scale-110 rounded-4xl flex items-center justify-center' , topics.userchoices.includes(topic)? 'bg-blue-500' : 'bg-gray-200']"
       @click="toggleChoice(topic)"
       >
         {{topic}}
@@ -106,7 +106,9 @@ const sentence = ref('')
 // fetch data
 const fetch_data = async () => {
   try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/self`)
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/self`, {
+      withCredentials: true
+    })
       default_introduction.value = response.data.default_introduction
       self_introduce.value = response.data.self_introduce
       topics.value = response.data.topics
@@ -144,13 +146,13 @@ const add_sentence = () => {
 
 // CHOOSE TOPICS
 const toggleChoice = (topic) => {
-  if (topics.value.userChoises.includes(topic)) {
-    topics.value.userChoises = topics.value.userChoises.filter(item => item !== topic)
+  if (topics.value.userchoices.includes(topic)) {
+    topics.value.userchoices = topics.value.userchoices.filter(item => item !== topic)
   } else 
   {
-    topics.value.userChoises.push(topic)
+    topics.value.userchoices.push(topic)
   }
-  console.log(topics.value.userChoises.includes(topic), topic)
+  console.log(topics.value.userchoices.includes(topic), topic)
 }
 
 
@@ -164,7 +166,9 @@ const updata_self= async(key) => {
   }
 
   try {
-    await axios.put(`${import.meta.env.VITE_API_URL}/update_self/`,data)
+    await axios.put(`${import.meta.env.VITE_API_URL}/update_self/`,data, {
+      withCredentials: true
+    })
     alert("updated")
   } catch (err) {
     console.error('there is an error', err)

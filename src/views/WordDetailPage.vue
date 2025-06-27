@@ -44,7 +44,9 @@ let audio = ref(null)
 
 onMounted (async () => {
     try {
-        const respone = await axios.get(`${import.meta.env.VITE_API_URL}/words`)
+        const respone = await axios.get(`${import.meta.env.VITE_API_URL}/words/`, {
+      withCredentials: true
+    })
         const words = respone.data
         word.value = words.find(item => item.key === key)
         console.log(word.value)
@@ -58,10 +60,12 @@ onMounted (async () => {
 const add_notes = async () => {
     if (text.value != word.value.notes)
     try {
-        await axios.put(`${import.meta.env.VITE_API_URL}/add_notes`,  {
+        await axios.put(`${import.meta.env.VITE_API_URL}/add_notes/`,  {
             "word": word.value.key, 
             "text": text.value
-        })
+        }, {
+      withCredentials: true
+    })
     } catch(err) {
         console.log("threre is an error with add notes ", err)
     }

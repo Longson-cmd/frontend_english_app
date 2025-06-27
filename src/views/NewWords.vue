@@ -103,8 +103,10 @@ const hasNext = ref(false)
 
 const fetch_data = async () => {
     try {
-        const respone = await axios.get(`${import.meta.env.VITE_API_URL}/list_words/?page=${currentPage.value}&size=${page_size}`)
-
+        const respone = await axios.get(`${import.meta.env.VITE_API_URL}/list_words/?page=${currentPage.value}&size=${page_size}`, {
+      withCredentials: true
+    })
+        console.log(`${import.meta.env.VITE_API_URL}/list_words/?page=${currentPage.value}&size=${page_size}`)
         words.value = respone.data.words
         hasNext.value = respone.data.has_next
         hasPrevious.value = respone.data.has_previous
@@ -140,7 +142,9 @@ const add_word = async () => {
     try {
         const word = new_word.value.trim()
         if (!word) return
-        await axios.post(`${import.meta.env.VITE_API_URL}/words/add/`, {word: word})
+        await axios.post(`${import.meta.env.VITE_API_URL}/words/add/`, {word: word}, {
+      withCredentials: true
+    })
         console.log('add new word to json file')
         new_word.value = ''
         await fetch_data()
@@ -159,11 +163,14 @@ onMounted(fetch_data)
 
 const Delete = async (key) => {
     try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/words/delete`, {data : {word: key}})
+        await axios.delete(`${import.meta.env.VITE_API_URL}/words/delete`, {
+            data: { word: key },
+            withCredentials: true
+        })
          await fetch_data ()
         console.log(`deleted ${key}`)
     } catch (err) {
-        console.error (`Deleted ${key} has a error`)
+        console.error (`Deleted ${key} has a error`, err)
     }
 }
 

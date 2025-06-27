@@ -74,11 +74,14 @@ const textArea = ref(null)
 
 const fetchWords = async () => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/words`)
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/words/`, {
+      withCredentials: true
+    })
+    console.log("Raw response.data:", response.data)
     words.value = response.data
     keys.value = words.value.filter(item => item.number > 3).map(item => item.key)
     console.log(keys.value)
-    console.log(`${import.meta.env.VITE_API_URL}/api/words`)
+    console.log(`${import.meta.env.VITE_API_URL}/api/words/`)
     console.log('Data was fetched successfully')
   } catch (e) {
     alert('There is an error: ' + e.message)
@@ -86,7 +89,9 @@ const fetchWords = async () => {
 
 
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/self_prompt`)
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/self_prompt`, {
+      withCredentials: true
+    })
     self.value = response.data
     self_introduction.value = self.value.self_introduce
     // console.log('Topics fetched:', self.value.topics)
@@ -159,13 +164,20 @@ const add_sentence = async() => {
         await axios.post(`${import.meta.env.VITE_API_URL}/words/add_sentence/`, {
         word: randomword.value, 
         sentence : text
-        })
+        }, {
+      withCredentials: true
+    })
         submittedSentence.value = text
         sentence.value = ''
         show_sentence.value = true
         console.log('Added sentence!')
     } catch(e) {
-        console.error('there is an error' + e)
+      if (e.response && e.response.status === 403) {
+        alert("This feature for paid users only!")
+      } else {
+           console.error('there is an error' + e)
+      }
+       
     }
 }
 

@@ -20,7 +20,7 @@
 
 
 <script setup>
-// import add_word from './components/add_word.vue';
+
 import practise from './components/practise.vue';
 </script> -->
 
